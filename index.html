@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spesial untuk Luthfiana Aisyah</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap');
+
+        :root {
+            --bg-color: #1a1a2e;
+            --primary-color: #f7b733;
+            --secondary-color: #e94560;
+            --text-color: #ffffff;
+            --envelope-color-light: #f5f5f5;
+            --envelope-color-dark: #e0e0e0;
+            --font-cursive: 'Great Vibes', cursive;
+            --font-sans: 'Poppins', sans-serif;
+        }
+
+        /* (FIX ANTI-SCROLL) Kunci layar agar tidak bisa digeser */
+        html, body {
+            margin: 0; padding: 0;
+            width: 100%;
+            height: 100vh; /* Gunakan 100vh untuk tinggi layar penuh */
+            font-family: var(--font-sans);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Kunci total scroll */
+            position: relative; 
+        }
+
+        /* 1. Latar Belakang "Magis" (Sama) */
+        #background-particles {
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; z-index: 0;
+        }
+        .particle {
+            /* ... (kode partikel sama) ... */
+            position: absolute; list-style: none; width: 10px; height: 10px;
+            background: var(--primary-color); border-radius: 50%; opacity: 0;
+            animation: magic-float 20s linear infinite;
+            box-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+        }
+
+        /* 2. Wrapper Amplop & Kartu (FIX RESPONSIVE) */
+        .envelope-container {
+            position: relative;
+            /* (FIX) Ukuran relatif: 90% lebar layar, maks 320px */
+            width: 90vw;
+            max-width: 320px;
+            
+            /* (FIX) Tinggi otomatis menyesuaikan lebar (rasio 320:220) */
+            aspect-ratio: 320 / 220; 
+
+            cursor: pointer;
+            z-index: 50;
+            transition: transform 0.3s ease;
+        }
+        
+        /* Efek hover ini hanya akan jalan di desktop */
+        .envelope-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* 3. Amplop (FIX RESPONSIVE) */
+        #envelope-view {
+            position: absolute;
+            width: 100%; height: 100%;
+            z-index: 10;
+            transform: translateY(-2.27%); /* -5px / 220px */
+            transition: opacity 0.5s 1s ease, transform 0.5s 1s ease; 
+        }
+
+        .envelope-layer {
+            position: absolute;
+            width: 100%; height: 100%;
+            border-radius: 3.125%; /* 10px / 320px */
+        }
+        
+        .envelope-main-body {
+            background-color: var(--envelope-color-light);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            z-index: 1; 
+        }
+        .envelope-inner-dark-body {
+            bottom: 0; left: 0;
+            height: 50%;
+            background-color: var(--envelope-color-dark);
+            border-bottom-left-radius: 3.125%;
+            border-bottom-right-radius: 3.125%;
+            z-index: 2;
+        }
+        .envelope-flap {
+            top: 0; left: 0;
+            height: 60%;
+            background-color: var(--envelope-color-light);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            z-index: 10;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out;
+            border-top-left-radius: 3.125%;
+            border-top-right-radius: 3.125%;
+        }
+
+        .seal {
+            position: absolute; 
+            /* (FIX) Posisi relatif */
+            top: 45.45%; /* 100px / 220px */
+            left: 50%;
+            transform: translateX(-50%);
+            /* (FIX) Ukuran relatif */
+            width: 9.375%; /* 30px / 320px */
+            padding-bottom: 9.375%; /* Trik agar tetap bulat */
+            height: 0;
+            
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            z-index: 11;
+            display: flex; justify-content: center; align-items: center;
+            color: white; 
+            font-size: 1.2rem; /* Ukuran font bisa tetap */
+            transition: opacity 0.3s;
+        }
+        /* (FIX) Konten hati di dalam seal */
+        .seal::before {
+            content: '♥';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .envelope-message {
+            position: absolute; 
+            top: 63.63%; /* 140px / 220px */
+            left: 0;
+            width: 100%; text-align: center;
+            font-family: var(--font-cursive);
+            font-size: 2.2rem;
+            color: #333; z-index: 10;
+            opacity: 1; transition: opacity 0.3s;
+            animation: pulse-text 2s infinite ease-in-out;
+        }
+        
+        /* 4. Kartu Ucapan (FIX RESPONSIVE) */
+        #card {
+            position: absolute;
+            /* (FIX) Ukuran relatif thd container */
+            width: 96.875%; /* 310px / 320px */
+            height: 95.45%; /* 210px / 220px */
+            
+            background-color: var(--bg-color);
+            border: 3px solid var(--primary-color);
+            border-radius: 15px;
+            box-sizing: border-box; padding: 25px;
+            z-index: 8; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            
+            /* (FIX) Posisi relatif */
+            bottom: 2.27%; /* 5px / 220px */
+            left: 1.5625%; /* 5px / 320px */
+            
+            transform: translateY(100%); /* Sembunyi di bawah */
+            opacity: 0;
+            transition: transform 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0.5s, opacity 0.5s 0.5s;
+        }
+
+        /* 5. Animasi 'open' (FIX RESPONSIVE) */
+        .envelope-container.open .envelope-flap { transform: rotateX(180deg); }
+        .envelope-container.open .seal,
+        .envelope-container.open .envelope-message { opacity: 0; }
+        
+        .envelope-container.open #card {
+            /* (FIX) Animasi meluncur relatif */
+            transform: translateY(-75%); 
+            opacity: 1;
+        }
+        .envelope-container.open #envelope-view {
+             opacity: 0.6; 
+             transform: translateY(-10%); 
+        }
+
+
+        /* 6. Konten Kartu (Sama) */
+        /* Font-size akan otomatis diskalakan browser di HP */
+        #card h1 {
+            font-family: var(--font-cursive); color: var(--primary-color);
+            font-size: 3.5rem; margin: 0; line-height: 1; text-align: center;
+        }
+        #card h2 {
+            font-family: var(--font-sans); font-size: 1.3rem;
+            margin: 10px 0 20px 0; color: var(--text-color); text-align: center;
+        }
+        .message-box {
+            font-size: 1rem; line-height: 1.6; height: 100px;
+            text-align: center; overflow-wrap: break-word; word-wrap: break-word;
+        }
+        .typed-cursor { opacity: 1; animation: blink 0.7s infinite; }
+
+        /* 7. Hujan Konfeti (Sama) */
+        #confetti-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 200;
+        }
+        .confetti {
+            /* ... (kode konfeti sama) ... */
+            position: absolute; width: 10px; height: 10px; opacity: 0;
+            animation: fall 5s linear infinite;
+        }
+        .confetti:nth-child(even) { background-color: var(--primary-color); }
+        .confetti:nth-child(odd) { background-color: var(--secondary-color); }
+
+        /* Keyframes Animasi (Sama) */
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        @keyframes blink {
+            0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; }
+        }
+        @keyframes magic-float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+        @keyframes pulse-text {
+            0% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.7; transform: scale(1); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <ul id="background-particles"></ul>
+    <div id="confetti-container"></div>
+
+    <div class="envelope-container" id="envelope-container">
+        
+        <div id="envelope-view">
+            <div class="envelope-layer envelope-main-body"></div>
+            <div class="envelope-layer envelope-inner-dark-body"></div>
+            <div class="envelope-flap"></div>
+            <div class="seal"></div> <div class="envelope-message">Buka Aku!</div>
+        </div>
+
+        <div id="card">
+            <h1>Aisyah</h1>
+            <h2>Selamat Ulang Tahun ke-17!</h2>
+            <div class="message-box">
+                <span id="typed-message"></span>
+            </div>
+        </div>
+    </div>
+
+    <audio id="birthday-song" src="https://ia800801.us.archive.org/2/items/HappyBirthdayToYouInstrumental/Happy%20Birthday%20To%20You%20(Instrumental).mp3" loop></audio>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+
+    <script>
+        // (JavaScript Sama persis dengan V15)
+        document.addEventListener('DOMContentLoaded', () => {
+            const envelopeContainer = document.getElementById('envelope-container');
+            const birthdaySong = document.getElementById('birthday-song');
+            let isOpened = false;
+            let typed;
+
+            createBackgroundParticles();
+
+            envelopeContainer.addEventListener('click', () => {
+                if (isOpened) return;
+                isOpened = true;
+
+                birthdaySong.volume = 0.3;
+                birthdaySong.play().catch(e => console.error("Audio play failed:", e));
+                envelopeContainer.classList.add('open');
+                startConfetti();
+                
+                setTimeout(() => {
+                    typed = new Typed('#typed-message', {
+                        strings: [
+                            "Hai Aisyah...",
+                            "Selamat ulang tahun ya.",
+                            "Semoga di usiamu yang ke-17 ini,",
+                            "kamu selalu sehat, bahagia,",
+                            "dan semua cita-citamu tercapai.",
+                            "Terus jadi adik yang hebat.",
+                            "Dari abangmu."
+                        ],
+                        typeSpeed: 50,
+                        backSpeed: 20,
+                        backDelay: 1500,
+                        loop: true,
+                        showCursor: true,
+                        cursorChar: '|',
+                    });
+                }, 1500); 
+            });
+
+            function startConfetti() {
+                // ... (fungsi sama)
+                const container = document.getElementById('confetti-container');
+                const particleCount = 100;
+                for (let i = 0; i < particleCount; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.animationDelay = `${Math.random() * 5}s`;
+                    const size = Math.random() * 10 + 5;
+                    confetti.style.width = `${size}px`;
+                    confetti.style.height = `${size}px`;
+                    if (Math.random() > 0.5) confetti.style.borderRadius = '50%';
+                    container.appendChild(confetti);
+                }
+            }
+
+            function createBackgroundParticles() {
+                // ... (fungsi sama)
+                const container = document.getElementById('background-particles');
+                const particleCount = 30;
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('li');
+                    particle.classList.add('particle');
+                    const size = Math.random() * 5 + 2;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.animationDelay = `${Math.random() * 20}s`;
+                    particle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                    container.appendChild(particle);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
